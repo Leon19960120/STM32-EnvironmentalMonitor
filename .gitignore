@@ -1,0 +1,59 @@
+STM32 嵌入式项目 .gitignore 配置文件
+# ==============================================
+# STM32 嵌入式项目通用 .gitignore
+# 适配 EIDE / Keil / VSCode / GCC/IAR 编译环境
+# 适配当前环境监测项目目录结构
+# ==============================================
+# 一、项目编译输出目录（核心忽略）
+build/
+Objects/
+Listings/
+DebugConfig/
+# 二、EIDE 插件专属缓存目录
+.eide/
+# 三、CMSIS 官方库（无需提交，可重新拉取）
+.cmsis/
+# 四、Keil / ARM 编译中间文件
+*.obj
+*.o
+*.d
+*.axf
+*.hex
+*.bin
+*.elf
+*.map
+*.lst
+*.htm
+*.crf
+*.dep
+*.bak
+*.log
+*.uvgui*
+*.uvopt*
+*.uvprojx.bak
+# 五、VSCode 配置与缓存
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/c_cpp_properties.json
+# 六、RTE 设备配置缓存
+RTE/
+# 七、系统冗余文件
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+# 八、Git 自带忽略（兜底）
+.git/
+.gitignore.bak
+# 九、保留核心源码目录（白名单）
+# 以下目录为项目核心代码，不忽略
+!.cmsis/include/
+!Hardware/
+!Library/
+!NET/
+!onenet/
+!Start/
+!System/
+!User/
