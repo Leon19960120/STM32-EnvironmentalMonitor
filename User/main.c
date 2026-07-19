@@ -8,6 +8,7 @@
 #include <string.h>
 #include "BUZZER.h"
 #include "LED.h"
+#include "display.h"
 
 #define ESP8266_ONENET_INFO "AT+CIPSTART=\"TCP\",\"mqtts.heclouds.com\",1883\r\n"
 
@@ -15,16 +16,14 @@ uint8_t Temp ;
 uint8_t humidity ;
 
 void Main_init(void){
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//中断控制分组
-    OLED_Init();
-	  Buzzer_Init();
-	  DHT11_DisplayTask();
-	  Buzzer_StartBeep();
-	  Led_Init();
-    Serial_Init();
-	 
-    ESP8266_Init();//初始化esp8266  
-	
+  NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);//中断控制分组
+  OLED_Init();
+	Buzzer_Init();
+	DisplayTask();
+	Buzzer_StartBeep();
+	Led_Init();
+  Serial_Init();
+	ESP8266_Init();//初始化esp8266  
     UsartPrintf(USART1,"Connect MQTTs Server start\r\n");
     while (ESP8266_SendCmd(ESP8266_ONENET_INFO,"CONNECT"))
     {
@@ -43,26 +42,23 @@ void Main_init(void){
     Delay_ms(500);       //给底层硬件500ms的喘息和清空时间
     ESP8266_Clear();     //极其重要：强行把刚才接收过·+IPD·的串口接收缓存全部清零！
     
-		OneNET_Subscribe();
-		
+    OneNET_Subscribe();	
 		while(DHT11_Init()){
 			UsartPrintf(USART1,"DHT11 Error\r\n");
 			Delay_ms(50);
      }
 	 }
 
-
 int main(void)
 {
     // 初始化外设
-	 Main_init();
-	 
+	 Main_init(); 
 	 unsigned short timeCount = 0;	//发送间隔变量
 	 unsigned char *dataPtr = NULL;	
     while (1)
     {
 			DHT11_Read_Data(&Temp ,&humidity);
-      //UsartPrintf(USART1,"Temp %d ,humidity %d \r\n",Temp,humidity);
+      UsartPrintf(USART1,"Temp %d ,humidity %d \r\n",Temp,humidity);
 			Delay_ms(50);
 			if(timeCount++>=100){
 				UsartPrintf(USART1,"OneNet_SendData\r\n");
@@ -80,21 +76,18 @@ int main(void)
 			if(dataPtr != NULL){
 				OneNet_RevPro(dataPtr);		
 			}
-//			 Buzzer_DataBeep();
-			  Delay_ms(50);
+			 Buzzer_DataBeep();
+			 Delay_ms(50);
 			//显示温湿度
 			// 调用DHT11读取数据（正确写法：传变量地址）
 			OLED_ShowCHinese(1, 1, 1);  // 温
 			OLED_ShowCHinese(1, 3, 2);  // 度
 			OLED_ShowCHinese(2, 1, 4);  // 湿
 			OLED_ShowCHinese(2, 3, 5);  // 度
-      
 			OLED_ShowNum(1, 6, Temp, 2);    // 显示温度整数
 			OLED_ShowString(1, 8, "C");
 			OLED_ShowNum(2, 6, humidity, 2);    // 显示湿度整数
 			OLED_ShowString(2, 8, "%");
-			
-		
 		}
 	}
 

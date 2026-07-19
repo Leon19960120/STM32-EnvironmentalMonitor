@@ -47,13 +47,14 @@ Thumbs.db
 # 八、Git 自带忽略（兜底）
 .git/
 .gitignore.bak
+# 忽略 OneNet 相关文件夹
+onenet/
 # 九、保留核心源码目录（白名单）
 # 以下目录为项目核心代码，不忽略
 !.cmsis/include/
 !Hardware/
 !Library/
 !NET/
-!onenet/
 !Start/
 !System/
 !User/

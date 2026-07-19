@@ -1,6 +1,6 @@
 #include "stm32f10x.h"
 #include "OLED_Font.h"
-//include  "Delay.h"
+#include  "Delay.h"
 
 /*引脚配置*/
 #define OLED_W_SCL(x)		GPIO_WriteBit(GPIOB, GPIO_Pin_8, (BitAction)(x))
@@ -338,37 +338,5 @@ void OLED_Init(void)
  }
 
 
- //显示汉字（老师那复制来的）
-////void OLED_ShowCHinese(uint8_t Line, uint8_t Column,uint8_t Number)
-//{     
-//	uint8_t i;
-//	OLED_SetCursor((Line - 1) * 2, (Column - 1) * 8);		//设置光标位置在上半部分
-//	for (i = 0; i < 16; i++)
-//	{
-//		OLED_WriteData(Hzk[2*Number][i]);			//显示上半部分内容
-//	}
-//	OLED_SetCursor((Line - 1) * 2 + 1, (Column - 1) * 8);	//设置光标位置在下半部分
-//	for (i = 0; i < 16; i++)
-//	{
-//		OLED_WriteData(Hzk[2*Number+1][i]);		//显示下半部分内容
-//	}				
-//}
+
  
- void DHT11_DisplayTask(void){
-	 // 第1步：显示“项目正在启动...”
-    OLED_Clear();
-    OLED_ShowString(1, 1, "Project Starting");
-    OLED_ShowString(2, 1, "Please wait...");
-    Delay_ms(1000);                     // 停留1秒，让用户看到启动信息
-
-    // 第2步：模拟初始化过程（可以换成实际硬件初始化检测）
-    // 此处假设初始化成功，直接显示成功信息
-    OLED_Clear();
-    OLED_ShowString(1, 1, "Initialization");
-    OLED_ShowString(2, 1, "Successful!");
-    OLED_ShowString(3, 1, "System Ready");
-    Delay_ms(800);                      // 显示成功信息，保持0.8秒
-
-    // 第3步：清屏，返回主循环调用（主循环会继续显示温湿度等）
-    OLED_Clear();
- }

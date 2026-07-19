@@ -2,43 +2,43 @@
 	************************************************************
 	************************************************************
 	************************************************************
-	*	�ļ����� 	onenet.c
+	*	??????? 	onenet.c
 	*
-	*	���ߣ� 		�ż���
+	*	????? 		?????
 	*
-	*	���ڣ� 		2017-05-08
+	*	????? 		2017-05-08
 	*
-	*	�汾�� 		V1.1
+	*	?��?? 		V1.1
 	*
-	*	˵���� 		��onenetƽ̨�����ݽ����ӿڲ�
+	*	????? 		??onenet???????????????
 	*
-	*	�޸ļ�¼��	V1.0��Э���װ�������ж϶���ͬһ���ļ������Ҳ�ͬЭ��ӿڲ�ͬ��
-	*				V1.1���ṩͳһ�ӿڹ�Ӧ�ò�ʹ�ã����ݲ�ͬЭ���ļ�����װЭ����ص����ݡ�
+	*	???????	V1.0??��???????????��???????????????????��????????
+	*				V1.1????????????��???????????��??????????��???????????
 	************************************************************
 	************************************************************
 	************************************************************
 **/
 
-//��Ƭ��ͷ�ļ�
+//?????????
 #include "stm32f10x.h"
 
-//�����豸
+//?????��
 #include "esp8266.h"
 
-//Э���ļ�
+//��?????
  //#include "onenet.h"
 #include "mqttkit.h"
 
-//�㷨
+//??
 #include "base64.h"
 #include "hmac_sha1.h"
 
-//Ӳ������
+//???????
 #include "usart.h"
 #include "delay.h"
-#include "DHT11.h"//��ʪ�ȴ�����
+#include "DHT11.h"//??????????
 
-//C��
+//C??
 //<string.h>
 #include <stdio.h>
 
@@ -60,16 +60,16 @@ extern unsigned char esp8266_buf[512];
 
 /*
 ************************************************************
-*	�������ƣ�	OTA_UrlEncode
+*	?????????	OTA_UrlEncode
 *
-*	�������ܣ�	sign��Ҫ����URL����
+*	?????????	sign???????URL????
 *
-*	��ڲ�����	sign�����ܽ��
+*	????????	sign????????
 *
-*	���ز�����	0-�ɹ�	����-ʧ��
+*	?????????	0-???	????-???
 *
-*	˵����		+			%2B
-*				�ո�		%20
+*	?????		+			%2B
+*				???		%20
 *				/			%2F
 *				?			%3F
 *				%			%25
@@ -145,21 +145,21 @@ static unsigned char OTA_UrlEncode(char *sign)
 
 /*
 ************************************************************
-*	�������ƣ�	OTA_Authorization
+*	?????????	OTA_Authorization
 *
-*	�������ܣ�	����Authorization
+*	?????????	????Authorization
 *
-*	��ڲ�����	ver��������汾�ţ����ڸ�ʽ��Ŀǰ��֧�ָ�ʽ"2018-10-31"
-*				res����Ʒid
-*				et������ʱ�䣬UTC��ֵ
-*				access_key��������Կ
-*				dev_name���豸��
-*				authorization_buf������token��ָ��
-*				authorization_buf_len������������(�ֽ�)
+*	????????	ver????????��????????????????????"2018-10-31"
+*				res?????id
+*				et?????????UTC???
+*				access_key?????????
+*				dev_name???��??
+*				authorization_buf??????token?????
+*				authorization_buf_len????????????(???)
 *
-*	���ز�����	0-�ɹ�	����-ʧ��
+*	?????????	0-???	????-???
 *
-*	˵����		��ǰ��֧��sha1
+*	?????		????????sha1
 ************************************************************
 */
 #define METHOD		"sha1"
@@ -169,22 +169,22 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 	
 	size_t olen = 0;
 	
-	char sign_buf[64];								//����ǩ����Base64������ �� URL������
-	char hmac_sha1_buf[64];							//����ǩ��
-	char access_key_base64[64];						//����access_key��Base64������
-	char string_for_signature[72];					//����string_for_signature������Ǽ��ܵ�key
+	char sign_buf[64];								//?????????Base64?????? ?? URL??????
+	char hmac_sha1_buf[64];							//???????
+	char access_key_base64[64];						//????access_key??Base64??????
+	char string_for_signature[72];					//????string_for_signature???????????key
 
-//----------------------------------------------------�����Ϸ���--------------------------------------------------------------------
+//----------------------------------------------------?????????--------------------------------------------------------------------
 	if(ver == (void *)0 || res == (void *)0 || et < 1564562581 || access_key == (void *)0
 		|| authorization_buf == (void *)0 || authorization_buf_len < 120)
 		return 1;
 	
-//----------------------------------------------------��access_key����Base64����----------------------------------------------------
+//----------------------------------------------------??access_key????Base64????----------------------------------------------------
 	memset(access_key_base64, 0, sizeof(access_key_base64));
 	BASE64_Decode((unsigned char *)access_key_base64, sizeof(access_key_base64), &olen, (unsigned char *)access_key, strlen(access_key));
 	//UsartPrintf(USART_DEBUG, "access_key_base64: %s\r\n", access_key_base64);
 	
-//----------------------------------------------------����string_for_signature-----------------------------------------------------
+//----------------------------------------------------????string_for_signature-----------------------------------------------------
 	memset(string_for_signature, 0, sizeof(string_for_signature));
 	if(flag)
 		snprintf(string_for_signature, sizeof(string_for_signature), "%d\n%s\nproducts/%s\n%s", et, METHOD, res, ver);
@@ -192,7 +192,7 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 		snprintf(string_for_signature, sizeof(string_for_signature), "%d\n%s\nproducts/%s/devices/%s\n%s", et, METHOD, res, dev_name, ver);
 	//UsartPrintf(USART_DEBUG, "string_for_signature: %s\r\n", string_for_signature);
 	
-//----------------------------------------------------����-------------------------------------------------------------------------
+//----------------------------------------------------????-------------------------------------------------------------------------
 	memset(hmac_sha1_buf, 0, sizeof(hmac_sha1_buf));
 	
 	hmac_sha1((unsigned char *)access_key_base64, strlen(access_key_base64),
@@ -201,16 +201,16 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 	
 	//UsartPrintf(USART_DEBUG, "hmac_sha1_buf: %s\r\n", hmac_sha1_buf);
 	
-//----------------------------------------------------�����ܽ������Base64����------------------------------------------------------
+//----------------------------------------------------????????????Base64????------------------------------------------------------
 	olen = 0;
 	memset(sign_buf, 0, sizeof(sign_buf));
 	BASE64_Encode((unsigned char *)sign_buf, sizeof(sign_buf), &olen, (unsigned char *)hmac_sha1_buf, strlen(hmac_sha1_buf));
 
-//----------------------------------------------------��Base64����������URL����---------------------------------------------------
+//----------------------------------------------------??Base64??????????URL????---------------------------------------------------
 	OTA_UrlEncode(sign_buf);
 	//UsartPrintf(USART_DEBUG, "sign_buf: %s\r\n", sign_buf);
 	
-//----------------------------------------------------����Token--------------------------------------------------------------------
+//----------------------------------------------------????Token--------------------------------------------------------------------
 	if(flag)
 		snprintf(authorization_buf, authorization_buf_len, "version=%s&res=products%%2F%s&et=%d&method=%s&sign=%s", ver, res, et, METHOD, sign_buf);
 	else
@@ -222,19 +222,19 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 }
 
 //==========================================================
-//	�������ƣ�	OneNET_RegisterDevice
+//	?????????	OneNET_RegisterDevice
 //
-//	�������ܣ�	�ڲ�Ʒ��ע��һ���豸
+//	?????????	?????????????��
 //
-//	��ڲ�����	access_key��������Կ
-//				pro_id����ƷID
-//				serial��Ψһ�豸��
-//				devid�����淵�ص�devid
-//				key�����淵�ص�key
+//	????????	access_key?????????
+//				pro_id?????ID
+//				serial??��??��??
+//				devid?????�Y???devid
+//				key?????�Y???key
 //
-//	���ز�����	0-�ɹ�		1-ʧ��
+//	?????????	0-???		1-???
 //
-//	˵����		
+//	?????		
 //==========================================================
 _Bool OneNET_RegisterDevice(void)
 {
@@ -243,7 +243,7 @@ _Bool OneNET_RegisterDevice(void)
 	unsigned short send_len = 11 + strlen(DEVICE_NAME);
 	char *send_ptr = NULL, *data_ptr = NULL;
 	
-	char authorization_buf[144];													//���ܵ�key
+	char authorization_buf[144];													//?????key
 	
 	send_ptr = malloc(send_len + 240);
 	if(send_ptr == NULL)
@@ -282,7 +282,7 @@ _Bool OneNET_RegisterDevice(void)
 	}
 	*/
 	
-	data_ptr = (char *)ESP8266_GetIPD(250);							//�ȴ�ƽ̨��Ӧ
+	data_ptr = (char *)ESP8266_GetIPD(250);							//????????
 	
 	if(data_ptr)
 	{
@@ -309,20 +309,20 @@ _Bool OneNET_RegisterDevice(void)
 }
 
 //==========================================================
-//	�������ƣ�	OneNet_DevLink
+//	?????????	OneNet_DevLink
 //
-//	�������ܣ�	��onenet��������
+//	?????????	??onenet????????
 //
-//	��ڲ�����	��
+//	????????	??
 //
-//	���ز�����	1-�ɹ�	0-ʧ��
+//	?????????	1-???	0-???
 //
-//	˵����		��onenetƽ̨��������
+//	?????		??onenet??????????
 //==========================================================
 _Bool OneNet_DevLink(void)
 {
 	
-	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};					//Э���
+	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};					//��???
 
 	unsigned char *dataPtr;
 	
@@ -339,29 +339,29 @@ _Bool OneNet_DevLink(void)
 	
 	if(MQTT_PacketConnect(PROID, authorization_buf, DEVICE_NAME, 256, 1, MQTT_QOS_LEVEL0, NULL, NULL, 0, &mqttPacket) == 0)
 	{
-		ESP8266_SendData(mqttPacket._data, mqttPacket._len);			//�ϴ�ƽ̨
+		ESP8266_SendData(mqttPacket._data, mqttPacket._len);			//?????
 		
-		dataPtr = ESP8266_GetIPD(250);									//�ȴ�ƽ̨��Ӧ
+		dataPtr = ESP8266_GetIPD(250);									//????????
 		if(dataPtr != NULL)
 		{
 			if(MQTT_UnPacketRecv(dataPtr) == MQTT_PKT_CONNACK)
 			{
 				switch(MQTT_UnPacketConnectAck(dataPtr))
 				{
-					case 0:UsartPrintf(USART_DEBUG, "Tips:	���ӳɹ�\r\n");status = 0;break;
+					case 0:UsartPrintf(USART_DEBUG, "Tips:	??????\r\n");status = 0;break;
 					
-					case 1:UsartPrintf(USART_DEBUG, "WARN:	����ʧ�ܣ�Э�����\r\n");break;
-					case 2:UsartPrintf(USART_DEBUG, "WARN:	����ʧ�ܣ��Ƿ���clientid\r\n");break;
-					case 3:UsartPrintf(USART_DEBUG, "WARN:	����ʧ�ܣ�������ʧ��\r\n");break;
-					case 4:UsartPrintf(USART_DEBUG, "WARN:	����ʧ�ܣ��û������������\r\n");break;
-					case 5:UsartPrintf(USART_DEBUG, "WARN:	����ʧ�ܣ��Ƿ�����(����token�Ƿ�)\r\n");break;
+					case 1:UsartPrintf(USART_DEBUG, "WARN:	????????��?????\r\n");break;
+					case 2:UsartPrintf(USART_DEBUG, "WARN:	?????????????clientid\r\n");break;
+					case 3:UsartPrintf(USART_DEBUG, "WARN:	?????????????????\r\n");break;
+					case 4:UsartPrintf(USART_DEBUG, "WARN:	??????????????????????\r\n");break;
+					case 5:UsartPrintf(USART_DEBUG, "WARN:	???????????????(????token???)\r\n");break;
 					
-					default:UsartPrintf(USART_DEBUG, "ERR:	����ʧ�ܣ�δ֪����\r\n");break;
+					default:UsartPrintf(USART_DEBUG, "ERR:	????????��?????\r\n");break;
 				}
 			}
 		}
 		
-		MQTT_DeleteBuffer(&mqttPacket);								//ɾ��
+		MQTT_DeleteBuffer(&mqttPacket);								//???
 	}
 	else
 		UsartPrintf(USART_DEBUG, "WARN:	MQTT_PacketConnect Failed\r\n");
@@ -394,20 +394,20 @@ unsigned char OneNet_FillBuf(char *buf)
 }
 
 //==========================================================
-//	�������ƣ�	OneNet_SendData
+//	?????????	OneNet_SendData
 //
-//	�������ܣ�	�ϴ����ݵ�ƽ̨
+//	?????????	??????????
 //
-//	��ڲ�����	type���������ݵĸ�ʽ
+//	????????	type?????????????
 //
-//	���ز�����	��
+//	?????????	??
 //
-//	˵����		
+//	?????		
 //==========================================================
 void OneNet_SendData(void)
 {
 	
-	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};												//Э���
+	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};												//��???
 	
 	char buf[256];
 	
@@ -417,19 +417,19 @@ void OneNet_SendData(void)
 	
 	memset(buf, 0, sizeof(buf));
 	
-	body_len = OneNet_FillBuf(buf);																	//��ȡ��ǰ��Ҫ���͵����������ܳ���
+	body_len = OneNet_FillBuf(buf);																	//???????????????????????????
 	
 	if(body_len)
 	{
-		if(MQTT_PacketSaveData(PROID, DEVICE_NAME, body_len, NULL, &mqttPacket) == 0)				//���
+		if(MQTT_PacketSaveData(PROID, DEVICE_NAME, body_len, NULL, &mqttPacket) == 0)				//???
 		{
 			for(; i < body_len; i++)
 				mqttPacket._data[mqttPacket._len++] = buf[i];
 			
-			ESP8266_SendData(mqttPacket._data, mqttPacket._len);									//�ϴ����ݵ�ƽ̨
+			ESP8266_SendData(mqttPacket._data, mqttPacket._len);									//??????????
 			UsartPrintf(USART_DEBUG, "Send %d Bytes\r\n", mqttPacket._len);
 			
-			MQTT_DeleteBuffer(&mqttPacket);															//ɾ��
+			MQTT_DeleteBuffer(&mqttPacket);															//???
 		}
 		else
 			UsartPrintf(USART_DEBUG, "WARN:	EDP_NewBuffer Failed\r\n");
@@ -438,48 +438,48 @@ void OneNet_SendData(void)
 }
 
 //==========================================================
-//	�������ƣ�	OneNET_Publish
+//	?????????	OneNET_Publish
 //
-//	�������ܣ�	������Ϣ
+//	?????????	???????
 //
-//	��ڲ�����	topic������������
-//				msg����Ϣ����
+//	????????	topic????????????
+//				msg?????????
 //
-//	���ز�����	��
+//	?????????	??
 //
-//	˵����		
+//	?????		
 //==========================================================
 void OneNET_Publish(const char *topic, const char *msg)
 {
 
-	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						//Э���
+	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						//��???
 	
 	UsartPrintf(USART_DEBUG, "Publish Topic: %s, Msg: %s\r\n", topic, msg);
 	
 	if(MQTT_PacketPublish(MQTT_PUBLISH_ID, topic, msg, strlen(msg), MQTT_QOS_LEVEL0, 0, 1, &mqtt_packet) == 0)
 	{
-		ESP8266_SendData(mqtt_packet._data, mqtt_packet._len);					//��ƽ̨���Ͷ�������
+		ESP8266_SendData(mqtt_packet._data, mqtt_packet._len);					//???????????????
 		
-		MQTT_DeleteBuffer(&mqtt_packet);										//ɾ��
+		MQTT_DeleteBuffer(&mqtt_packet);										//???
 	}
 
 }
 
 //==========================================================
-//	�������ƣ�	OneNET_Subscribe
+//	?????????	OneNET_Subscribe
 //
-//	�������ܣ�	����
+//	?????????	????
 //
-//	��ڲ�����	��
+//	????????	??
 //
-//	���ز�����	��
+//	?????????	??
 //
-//	˵����		
+//	?????		
 //==========================================================
 void OneNET_Subscribe(void)
 {
 	
-	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						//Э���
+	MQTT_PACKET_STRUCTURE mqtt_packet = {NULL, 0, 0, 0};						//��???
 	
 	char topic_buf[56];
 	const char *topic = topic_buf;
@@ -490,23 +490,23 @@ void OneNET_Subscribe(void)
 	
 	if(MQTT_PacketSubscribe(MQTT_SUBSCRIBE_ID, MQTT_QOS_LEVEL0, &topic, 1, &mqtt_packet) == 0)
 	{
-		ESP8266_SendData(mqtt_packet._data, mqtt_packet._len);					//��ƽ̨���Ͷ�������
+		ESP8266_SendData(mqtt_packet._data, mqtt_packet._len);					//???????????????
 		
-		MQTT_DeleteBuffer(&mqtt_packet);										//ɾ��
+		MQTT_DeleteBuffer(&mqtt_packet);										//???
 	}
 
 }
 
 //==========================================================
-//	�������ƣ�	OneNet_RevPro
+//	?????????	OneNet_RevPro
 //
-//	�������ܣ�	ƽ̨�������ݼ��
+//	?????????	????????????
 //
-//	��ڲ�����	dataPtr��ƽ̨���ص�����
+//	????????	dataPtr?????????????
 //
-//	���ز�����	��
+//	?????????	??
 //
-//	˵����		
+//	?????		
 //==========================================================
 void OneNet_RevPro(unsigned char *cmd)
 {
@@ -531,7 +531,7 @@ void OneNet_RevPro(unsigned char *cmd)
 	type = MQTT_UnPacketRecv(cmd);
 	switch(type)
 	{
-		case MQTT_PKT_PUBLISH:																//���յ�Publish��Ϣ
+		case MQTT_PKT_PUBLISH:																//?????Publish???
 		
 			result = MQTT_UnPacketPublish(cmd, &cmdid_topic, &topic_len, &req_payload, &req_len, &qos, &pkt_id);
 			if(result == 0)
@@ -541,7 +541,7 @@ void OneNet_RevPro(unsigned char *cmd)
 				UsartPrintf(USART_DEBUG, "topic: %s, topic_len: %d, payload: %s, payload_len: %d\r\n",
 																	cmdid_topic, topic_len, req_payload, req_len);
 				
-				data_ptr = strstr(cmdid_topic, "request/");									//����cmdid
+				data_ptr = strstr(cmdid_topic, "request/");									//????cmdid
 				if(data_ptr)
 				{
 					char topic_buf[80], cmdid[40];
@@ -549,23 +549,23 @@ void OneNet_RevPro(unsigned char *cmd)
 					data_ptr = strchr(data_ptr, '/');
 					data_ptr++;
 					
-					memcpy(cmdid, data_ptr, 36);											//����cmdid
+					memcpy(cmdid, data_ptr, 36);											//????cmdid
 					cmdid[36] = 0;
 					
 					snprintf(topic_buf, sizeof(topic_buf), "$sys/%s/%s/cmd/response/%s",
 															PROID, DEVICE_NAME, cmdid);
-					OneNET_Publish(topic_buf, "ojbk");										//�ظ�����
+					OneNET_Publish(topic_buf, "ojbk");										//???????
 				}
 			}
 			
-		case MQTT_PKT_PUBACK:														//����Publish��Ϣ��ƽ̨�ظ���Ack
+		case MQTT_PKT_PUBACK:														//????Publish????????????Ack
 		
 			if(MQTT_UnPacketPublishAck(cmd) == 0)
 				UsartPrintf(USART_DEBUG, "Tips:	MQTT Publish Send OK\r\n");
 			
 		break;
 		
-		case MQTT_PKT_SUBACK:																//����Subscribe��Ϣ��Ack
+		case MQTT_PKT_SUBACK:																//????Subscribe?????Ack
 		
 			if(MQTT_UnPacketSubscribe(cmd) == 0)
 				UsartPrintf(USART_DEBUG, "Tips:	MQTT Subscribe OK\r\n");
@@ -579,24 +579,24 @@ void OneNet_RevPro(unsigned char *cmd)
 		break;
 	}
 	
-	ESP8266_Clear();									//��ջ���
+	ESP8266_Clear();									//??????
 	
 	if(result == -1)
 		return;
 	
-	dataPtr = strchr(req_payload, ':');					//����':'
+	dataPtr = strchr(req_payload, ':');					//????':'
 
-	if(dataPtr != NULL && result != -1)					//����ҵ���
+	if(dataPtr != NULL && result != -1)					//????????
 	{
 		dataPtr++;
 		
-		while(*dataPtr >= '0' && *dataPtr <= '9')		//�ж��Ƿ����·��������������
+		while(*dataPtr >= '0' && *dataPtr <= '9')		//?��???????��??????????????
 		{
 			numBuf[num++] = *dataPtr++;
 		}
 		numBuf[num] = 0;
 		
-		num = atoi((const char *)numBuf);				//תΪ��ֵ��ʽ
+		num = atoi((const char *)numBuf);				//????????
 	}
 
 	if(type == MQTT_PKT_CMD || type == MQTT_PKT_PUBLISH)

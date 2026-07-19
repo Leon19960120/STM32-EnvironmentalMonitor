@@ -8,7 +8,6 @@
 
 char Serial_RxPacket[100];				//定义接收数据包数组，数据包格式"@MSG\r\n"
 uint8_t Serial_RxFlag;					//定义接收数据包标志位
-
 void Serial_Init(void)
 {
 	/*开启时钟*/
