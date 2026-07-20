@@ -2,6 +2,12 @@
 
 An IoT environmental monitoring device based on STM32F103C8, using ESP8266 Wi-Fi module to upload temperature and humidity data to the OneNET cloud platform via MQTT protocol.
 
+## 效果展示
+
+![硬件实物图](./assets/hardware.jpg)
+
+
+
 ## Hardware Overview
 
 | Component | Model / Type | Function |

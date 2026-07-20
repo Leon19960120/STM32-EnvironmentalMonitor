@@ -31,6 +31,8 @@ DebugConfig/
 *.uvgui*
 *.uvopt*
 *.uvprojx.bak
+Target_1.BAT
+
 # 五、VSCode 配置与缓存
 .vscode/
 !.vscode/settings.json

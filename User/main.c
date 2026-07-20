@@ -24,24 +24,23 @@ void Main_init(void){
 	Led_Init();
   Serial_Init();
 	ESP8266_Init();//初始化esp8266  
-    UsartPrintf(USART1,"Connect MQTTs Server start\r\n");
-    while (ESP8266_SendCmd(ESP8266_ONENET_INFO,"CONNECT"))
-    {
-         Delay_ms(100);
-    }
-    UsartPrintf(USART1,"Connect MQTTs Server success\r\n");
+		UsartPrintf(USART1,"Connect MQTTs Server start\r\n");
+		while (ESP8266_SendCmd(ESP8266_ONENET_INFO,"CONNECT"))
+		{
+				 Delay_ms(100);
+		}
+		UsartPrintf(USART1,"Connect MQTTs Server success\r\n");
 		while(OneNet_DevLink() != 0)
-    {
-        UsartPrintf(USART1, "网络登陆失败\r\n");
-        Delay_ms(100);
-    }
-    
+		{
+				UsartPrintf(USART1, "网络登陆失败\r\n");
+				Delay_ms(100);
+		}
     // 跳出上面循环，登录成功
 		OLED_ShowString(2, 6, "OK");
     UsartPrintf(USART_DEBUG, "111111111111\r\n");
     Delay_ms(500);       //给底层硬件500ms的喘息和清空时间
     ESP8266_Clear();     //极其重要：强行把刚才接收过·+IPD·的串口接收缓存全部清零！
-    
+
     OneNET_Subscribe();	
 		while(DHT11_Init()){
 			UsartPrintf(USART1,"DHT11 Error\r\n");
