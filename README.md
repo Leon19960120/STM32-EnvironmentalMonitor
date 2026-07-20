@@ -6,7 +6,7 @@ An IoT environmental monitoring device based on STM32F103C8, using ESP8266 Wi-Fi
 
 ![硬件实物图](./assets/hardware.jpg)
 
-
+![微信小程序](./assets/微信小程序.jpg)
 
 ## Hardware Overview
 
