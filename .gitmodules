@@ -1,0 +1,3 @@
+[submodule "temp-humidity-wx-miniapp"]
+	path = temp-humidity-wx-miniapp
+	url = https://github.com/Leon19960120/temp-humidity-wx-miniapp.git
