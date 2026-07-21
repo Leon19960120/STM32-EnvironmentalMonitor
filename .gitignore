@@ -9,6 +9,7 @@ build/
 Objects/
 Listings/
 DebugConfig/
+onenet/
 # 二、EIDE 插件专属缓存目录
 .eide/
 # 三、CMSIS 官方库（无需提交，可重新拉取）

@@ -6,7 +6,7 @@ void Buzzer_ON(void);
 void Buzzer_OFF(void);
 void Buzzer_Turn(void);
 
-// 新增功能
+// 鏂板鍔熻兘
 void Buzzer_StartBeep(void);
 void Buzzer_DataBeep(void);
 void Buzzer_AlarmStart(void);

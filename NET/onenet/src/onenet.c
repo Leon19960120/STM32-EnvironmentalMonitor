@@ -322,14 +322,14 @@ static unsigned char OneNET_Authorization(char *ver, char *res, unsigned int et,
 //
 //	入口参数：	无
 //
-//	返回参数：	1-成功	0-失败
+//	返回参数：	0 - 成功, 1 - 失败
 //
 //	说明：		与onenet平台建立连接
 //==========================================================
 _Bool OneNet_DevLink(void)
 {
 	 //  函数入口第一行就打印，确保能看到
-   //UsartPrintf(USART_DEBUG, "\r\n>>> 进入OneNet_DevLink函数 <<<\r\n");
+  UsartPrintf(USART_DEBUG, "\r\n>>> 进入OneNet_DevLink函数 <<<\r\n");
 	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};					//协议包
 
 	unsigned char *dataPtr;
@@ -339,7 +339,7 @@ _Bool OneNet_DevLink(void)
 	_Bool status = 1;
 	
 	 //UsartPrintf(USART_DEBUG, "1. 开始计算登录Token...\r\n");
-	// ? 修复: 使用ACCESS_KEY而不是未初始化的key变量
+	//  修复: 使用ACCESS_KEY而不是未初始化的key变量
 	OneNET_Authorization("2018-10-31", PROID, 1956499200, ACCESS_KEY, DEVICE_NAME,
 								authorization_buf, sizeof(authorization_buf), 0);
 	  
@@ -351,7 +351,7 @@ _Bool OneNet_DevLink(void)
 		
 		ESP8266_SendData(mqttPacket._data, mqttPacket._len);			//上传平台
 		
-		dataPtr = ESP8266_GetIPD(250);									//等待平台响应
+		dataPtr = ESP8266_GetIPD(1500);									//等待平台响应
 		if(dataPtr != NULL)
 		{
 			if(MQTT_UnPacketRecv(dataPtr) == MQTT_PKT_CONNACK)
@@ -359,13 +359,11 @@ _Bool OneNet_DevLink(void)
 				switch(MQTT_UnPacketConnectAck(dataPtr))
 				{
 					case 0:UsartPrintf(USART_DEBUG, "Tips:1	连接成功\r\n");status = 0;break;
-					
 					case 1:UsartPrintf(USART_DEBUG, "WARN:	连接失败：协议错误\r\n");break;
 					case 2:UsartPrintf(USART_DEBUG, "WARN:	连接失败：非法的clientid\r\n");break;
 					case 3:UsartPrintf(USART_DEBUG, "WARN:	连接失败：服务器失败\r\n");break;
 					case 4:UsartPrintf(USART_DEBUG, "WARN:	连接失败：用户名或密码错误\r\n");break;
 					case 5:UsartPrintf(USART_DEBUG, "WARN:	连接失败：非法链接(比如token非法)\r\n");break;
-					
 					default:UsartPrintf(USART_DEBUG, "ERR:	连接失败：未知错误\r\n");break;
 				}
 			}

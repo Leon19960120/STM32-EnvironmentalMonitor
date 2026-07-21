@@ -735,16 +735,6 @@
               <FilePath>.\Hardware\BUZZER.c</FilePath>
             </File>
             <File>
-              <FileName>LightSensor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Hardware\LightSensor.h</FilePath>
-            </File>
-            <File>
-              <FileName>LightSensor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Hardware\LightSensor.c</FilePath>
-            </File>
-            <File>
               <FileName>OLED.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Hardware\OLED.c</FilePath>
